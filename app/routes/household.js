@@ -3,7 +3,10 @@ const router = express.Router();
 const householdController = require('../controllers/householdController');
 const requireLogin = require('../middleware/requireLogin');
 
-// View household details
+// /household  → base page
+router.get('/', requireLogin, householdController.showHouseholdHome);
+
+// /household/view  → view details page
 router.get('/view', requireLogin, householdController.showProfile);
 
 // Edit form

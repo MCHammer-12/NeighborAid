@@ -4,7 +4,6 @@ const session = require('express-session');
 
 console.log("VIEWS PATH:", path.join(__dirname, "views"));
 
-// middleware
 const requireLogin = require('./middleware/requireLogin');
 
 // routes
@@ -31,7 +30,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // body parsing
 app.use(express.urlencoded({ extended: true }));
 
-// session
+// ----------------------
+// FIX: SESSION MUST COME BEFORE ROUTES
+// ----------------------
 app.use(
   session({
     secret: "neighboraidsecret",
@@ -69,9 +70,11 @@ app.post('/logout', (req, res) => {
   req.session.destroy(() => res.redirect('/auth/login'));
 });
 
-// routes
+// ----------------------
+// ROUTES (DO NOT MOVE requireLogin to dashboard)
+// ----------------------
 app.use('/auth', authRoutes);
-app.use('/dashboard', dashboardRoutes);
+app.use('/dashboard', dashboardRoutes);  // <-- leave unchanged
 app.use('/household', requireLogin, householdRoutes);
 app.use('/resources', requireLogin, resourcesRoutes);
 app.use('/directory', requireLogin, directoryRoutes);
@@ -82,4 +85,6 @@ app.use('/neighborhoods', requireLogin, neighborhoodsRoutes);
 app.use('/profile', requireLogin, profileRoutes);
 
 const PORT = 3000;
-app.listen(PORT, () => console.log(`NeighborAid running on http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`NeighborAid running on http://localhost:${PORT}`)
+);

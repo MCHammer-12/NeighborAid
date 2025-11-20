@@ -1,31 +1,34 @@
 const db = require('../db/query');
 
+// Show the household view page
 exports.showProfile = async (req, res) => {
-  const household = await db.query(
+  const result = await db.query(
     `SELECT * FROM households WHERE user_id = $1`,
     [req.user.id]
   );
 
   res.render('household/view', {
     user: req.user,
-    household: household.rows[0]
+    household: result.rows[0]
   });
 };
 
+// Show the edit form
 exports.showEditForm = async (req, res) => {
   const id = req.params.id;
 
-  const household = await db.query(
+  const result = await db.query(
     `SELECT * FROM households WHERE id = $1`,
     [id]
   );
 
   res.render('household/edit', {
     user: req.user,
-    household: household.rows[0]
+    household: result.rows[0]
   });
 };
 
+// Update household data
 exports.updateProfile = async (req, res) => {
   const { address, latitude, longitude, phone_number, readiness_level, notes } = req.body;
 
@@ -38,4 +41,17 @@ exports.updateProfile = async (req, res) => {
   );
 
   res.redirect('/household/view');
+};
+
+// Route for /household (homepage of household section)
+exports.showHouseholdHome = async (req, res) => {
+  const result = await db.query(
+    `SELECT * FROM households WHERE user_id = $1`,
+    [req.user.id]
+  );
+
+  res.render('household/view', {
+    user: req.user,
+    household: result.rows[0]
+  });
 };
