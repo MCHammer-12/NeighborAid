@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 
+console.log("VIEWS PATH:", path.join(__dirname, "views"));
+
 // middleware
 const requireLogin = require('./middleware/requireLogin');
 

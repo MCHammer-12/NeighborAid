@@ -4,91 +4,155 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NeighborAid - Home</title>
+
   <link rel="icon" type="image/png" href="/images/NeighborAid Logo.png">
-  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #e3f2fd;
       margin: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
     }
 
+    /* NAVBAR */
     .navbar {
-      background-color: #fff;
+      background: white;
       box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1);
     }
     .navbar-brand img {
-      height: 50px;
+      height: 55px;
     }
 
-    .hero {
-      padding: 4rem 1rem 3rem;
+    /* Make the nav login button match the hero button */
+    .btn-login {
+      background: white;
+      color: #1e3c72 !important;
+      padding: 14px 26px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      transition: all .25s ease;
+    }
+    .btn-login:hover {
+      background: white;
+      color: #162d59 !important;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+
+    /* HERO SECTION */
+    .blue-top {
+      padding-top: 5rem;
+      padding-bottom: 8rem;
       text-align: center;
     }
-    .hero img {
-      width: 650px;
+    .blue-top h1 {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .blue-top p {
+      font-size: 1.15rem;
+      opacity: 0.9;
     }
 
-    .slogan {
-      font-size: 1.2rem;
-      color: #0d6efd;
-      font-weight: 500;
-      margin-top: 0.25rem;
+    /* White hero button */
+    .hero-btn {
+      background: white;
+      color: #1e3c72;
+      padding: 14px 26px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      margin-top: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      transition: all .25s ease;
+    }
+    .hero-btn:hover {
+      background: white;
+      color: #162d59;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     }
 
-    .features-section {
-      background-color: #fff;
-      padding: 4rem 2rem;
+    /* FEATURES SECTION — moved DOWN properly */
+    .features-wrapper {
+      background: white;
+      color: black;
       border-radius: 2rem 2rem 0 0;
-      box-shadow: 0 -0.5rem 1rem rgba(0,0,0,0.05);
+      margin-top: 6rem; /* <-- THIS MOVES THE CONTAINER DOWN */
+      padding: 3rem 1.5rem;
     }
+
     .feature-card {
       text-align: center;
-      padding: 2rem;
       border-radius: 1rem;
       border: 1px solid #ddd;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      background-color: #fff;
-      margin-bottom: 2rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      background: white;
+      transition: all .25s ease;
     }
     .feature-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-6px);
       box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
     }
     .feature-card h3 {
-      margin-bottom: 1rem;
-      color: #0d6efd;
+      color: #1e3c72;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
     }
 
+    /* FOOTER */
     footer {
-      text-align: center;
+      background: white;
       padding: 2rem 1rem;
-      background-color: #f8f9fa;
+      text-align: center;
       color: #555;
+      border-top: 1px solid #eee;
     }
     footer a {
-      color: #0d6efd;
+      color: #1e3c72;
+      font-weight: 600;
       text-decoration: none;
     }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
   </style>
 </head>
+
 <body>
 
+  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg px-5">
-    <a class="navbar-brand" href="/"><img src="/images/NeighborAid Icon.png" alt="NeighborAid Logo"></a>
+    <a class="navbar-brand" href="/">
+      <img src="/images/NeighborAid Logo No Back.png" alt="NeighborAid Logo">
+    </a>
+
     <div class="ms-auto">
-      <a href="/auth/login" class="btn btn-primary">Login</a>
+      <a href="/auth/login" class="btn-login">Login</a>
     </div>
   </nav>
 
-  <section class="hero container">
-    <img src="/images/NeighborAid Logo No Back.png" alt="NeighborAid Full Logo">
-    <p class="slogan"><i>Helping hands on every block</i></p>
+  <!-- HERO -->
+  <section class="blue-top">
+    <h1>Welcome to NeighborAid!</h1>
+    <p>Helping hands on every block.</p>
+    <br>
+    <a href="/auth/register" class="hero-btn">
+      New here? Create an account
+    </a>
   </section>
 
-  <section class="features-section">
+  <!-- LOWER FEATURES -->
+  <section class="features-wrapper">
     <div class="container">
       <div class="row">
 
@@ -108,8 +172,8 @@
 
         <div class="col-md-4">
           <div class="feature-card">
-            <h3>Safe and Secure</h3>
-            <p>Your information is protected.</p>
+            <h3>Safe & Secure</h3>
+            <p>Your information is always protected.</p>
           </div>
         </div>
 
@@ -117,10 +181,10 @@
     </div>
   </section>
 
+  <!-- FOOTER -->
   <footer>
     © 2025 NeighborAid. All rights reserved. | <a href="/auth/login">Login</a>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
