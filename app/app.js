@@ -31,18 +31,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
 // ----------------------
-// FIX: SESSION MUST COME BEFORE ROUTES
+// SESSION
 // ----------------------
 app.use(
   session({
-    secret: "neighboraidsecret",
+    secret: process.env.SESSION_SECRET || "neighboraidsecret",
     resave: false,
     saveUninitialized: false,
-    cookie: { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }
+    cookie: { 
+      httpOnly: true, 
+      secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+      maxAge: 24 * 60 * 60 * 1000 
+    }
   })
 );
 
-// debugging: show session
+// debugging: show session (remove in production)
 app.use((req, res, next) => {
   console.log("CURRENT SESSION:", req.session);
   next();
@@ -71,10 +75,10 @@ app.post('/logout', (req, res) => {
 });
 
 // ----------------------
-// ROUTES (DO NOT MOVE requireLogin to dashboard)
+// ROUTES
 // ----------------------
 app.use('/auth', authRoutes);
-app.use('/dashboard', dashboardRoutes);  // <-- leave unchanged
+app.use('/dashboard', dashboardRoutes);
 app.use('/household', requireLogin, householdRoutes);
 app.use('/resources', requireLogin, resourcesRoutes);
 app.use('/directory', requireLogin, directoryRoutes);
@@ -84,7 +88,8 @@ app.use('/settings', requireLogin, settingsRoutes);
 app.use('/neighborhoods', requireLogin, neighborhoodsRoutes);
 app.use('/profile', requireLogin, profileRoutes);
 
-const PORT = 3000;
+// CRITICAL: Use environment variable for port (Elastic Beanstalk requirement)
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () =>
-  console.log(`NeighborAid running on http://localhost:${PORT}`)
+  console.log(`NeighborAid running on port ${PORT}`)
 );
