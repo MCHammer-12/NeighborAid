@@ -40,12 +40,13 @@ app.use(
     saveUninitialized: false,
     cookie: { 
       httpOnly: true, 
-      // Use secure cookies only if HTTPS is available
+      // Enable secure cookies when HTTPS is available
       secure: process.env.USE_HTTPS === 'true',
       maxAge: 24 * 60 * 60 * 1000 
     }
   })
 );
+
 
 
 
