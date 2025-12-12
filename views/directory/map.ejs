@@ -1,0 +1,34 @@
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<style>
+  #map {
+    height: calc(100vh - 120px);
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .map-container {
+    padding: 1rem 2rem;
+  }
+
+  .filter-panel {
+    margin-bottom: 1rem;
+  }
+</style>
+
+<div class="map-container">
+  <h2>Neighborhood Resource Map</h2>
+  <p>View available resources shared by households in your neighborhood.</p>
+
+  <div class="filter-panel">
+    <!-- Filters will be injected here later -->
+  </div>
+
+  <div id="map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/js/map.js"></script>
