@@ -37,15 +37,30 @@
       margin-bottom: 30px;
     }
 
+    .logo-link {
+      text-decoration: none;
+      display: inline-block;
+    }
+
     .logo-section img {
       height: 60px;
       margin-bottom: 15px;
+      transition: transform 0.2s;
+    }
+
+    .logo-link:hover img {
+      transform: scale(1.05);
     }
 
     .logo-section h1 {
       color: #1e3c72;
       font-size: 28px;
       margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+
+    .logo-link:hover h1 {
+      color: #2a5298;
     }
 
     .logo-section p {
@@ -178,8 +193,10 @@
 <body>
   <div class="login-container">
     <div class="logo-section">
-      <img src="/images/NeighborAid Icon.png" alt="NeighborAid Logo">
-      <h1>NeighborAid</h1>
+      <a href="/" class="logo-link">
+        <img src="/images/NeighborAid Icon.png" alt="NeighborAid Logo">
+        <h1>NeighborAid</h1>
+      </a>
       <p>Helping hands on every block</p>
     </div>
 
