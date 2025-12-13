@@ -447,7 +447,7 @@
 
             <div class="nav-section">
                 <div class="nav-section-title">Household</div>
-                <a href="/household" class="nav-link">
+                <a href="/household/view" class="nav-link">
                     <div class="nav-icon">🏠</div>
                     <span>My Household</span>
                 </a>
@@ -471,13 +471,13 @@
 
             <div class="nav-section">
                 <div class="nav-section-title">Account</div>
-                <a href="/settings" class="nav-link">
+                <!-- <a href="/settings" class="nav-link">
                     <div class="nav-icon">⚙️</div>
                     <span>Settings</span>
-                </a>
+                </a> -->
                 <a href="/profile" class="nav-link">
                     <div class="nav-icon">👤</div>
-                    <span>Profile</span>
+                    <span>Profile Settings</span>
                 </a>
             </div>
         </aside>
@@ -491,7 +491,9 @@
                 <div class="card">
                     <div class="card-icon households">🏠</div>
                     <div class="card-title">Household Status</div>
-                    <div class="card-value"><span class="readiness-indicator <%= user.household ? 'readiness-' + (user.household.readiness_level || 'low') : 'readiness-low' %>"></span></div>
+                    <div class="card-value">
+                    <span class="readiness-indicator <%= household ? 'readiness-' + household.readiness_level : 'readiness-low' %>"></span>
+                    </div>
                     <a href="/household/view" class="card-action">View Details →</a>
                 </div>
 
@@ -509,15 +511,15 @@
                     <a href="/directory/map" class="card-action">View Map →</a>
                 </div>
 
-                <div class="card">
+                <!-- <div class="card">
                     <div class="card-icon alerts">⚠️</div>
                     <div class="card-title">Alerts</div>
                     <div class="card-value">0</div>
                     <a href="/alerts" class="card-action">View All →</a>
-                </div>
+                </div> -->
             </div>
 
-            <div class="household-profile-section">
+            <!-- <div class="household-profile-section">
                 <h3 class="section-title">
                     <span class="readiness-indicator <%= user.household ? 'readiness-' + (user.household.readiness_level || 'low') : 'readiness-low' %>"></span>
                     Household Profile
@@ -560,7 +562,7 @@
                         <p style="color: #999; text-align: center; padding: 20px;">No resources added yet. <a href="/resources/add" style="color: #2a5298;">Add your first resource</a></p>
                     <% } %>
                 </div>
-            </div>
+            </div> -->
         </main>
     </div>
 </body>
