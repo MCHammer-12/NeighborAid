@@ -62,6 +62,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Initialize sidebar state on page load
+    if (window.innerWidth > 768) {
+        // Desktop: start collapsed (60px)
+        if (mainContent) {
+            mainContent.style.marginLeft = '60px';
+        }
+    } else {
+        // Mobile: no margin
+        if (mainContent) {
+            mainContent.style.marginLeft = '0';
+        }
+    }
+
     // Handle window resize
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768) {
