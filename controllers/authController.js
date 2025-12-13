@@ -46,10 +46,10 @@ exports.showRegister = (req, res) => {
 };
 
 exports.handleRegister = async (req, res) => {
-  const { first_name, last_name, email, password, confirm_password, neighborhood_code } = req.body;
+  const { first_name, last_name, email, password, confirmPassword, neighborhood_code } = req.body;
 
   // Password match
-  if (password !== confirm_password) {
+  if (password !== confirmPassword) {
     return res.render("register", { error: "Passwords do not match" });
   }
 

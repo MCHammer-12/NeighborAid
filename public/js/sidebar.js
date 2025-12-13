@@ -86,22 +86,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Initialize sidebar state on page load
-    if (window.innerWidth > 768) {
-        // Desktop: start collapsed
-        sidebar.classList.add('collapsed');
-        if (mainContent) {
-            mainContent.style.marginLeft = '70px';
+        if (window.innerWidth > 768) {
+            // Desktop: already starts collapsed from HTML
+            if (mainContent) {
+                mainContent.style.marginLeft = '70px';
+            }
+        } else {
+            // Mobile: ensure it's closed
+            sidebar.classList.remove('collapsed');
+            sidebar.classList.remove('open');
+            if (overlay) {
+                overlay.classList.remove('active');
+            }
+            if (mainContent) {
+                mainContent.style.marginLeft = '0';
+            }
         }
-    } else {
-        // Mobile: ensure it's closed
-        sidebar.classList.remove('open');
-        if (overlay) {
-            overlay.classList.remove('active');
-        }
-        if (mainContent) {
-            mainContent.style.marginLeft = '0';
-        }
-    }
 
     // Handle window resize
     let resizeTimer;
