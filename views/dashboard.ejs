@@ -491,7 +491,9 @@
                 <div class="card">
                     <div class="card-icon households">🏠</div>
                     <div class="card-title">Household Status</div>
-                    <div class="card-value"><span class="readiness-indicator <%= user.household ? 'readiness-' + (user.household.readiness_level || 'low') : 'readiness-low' %>"></span></div>
+                    <div class="card-value">
+                    <span class="readiness-indicator <%= household ? 'readiness-' + household.readiness_level : 'readiness-low' %>"></span>
+                    </div>
                     <a href="/household/view" class="card-action">View Details →</a>
                 </div>
 
