@@ -29,7 +29,17 @@ exports.listHouseholds = async (req, res) => {
       JOIN resource_types rt ON r.resource_type_id = rt.id
     `);
 
-    // 3. Group resources by household_id
+    // 3. Get distinct neighborhoods for filtering
+    const neighborhoodsResult = await db.query(`
+      SELECT DISTINCT 
+        neighborhood_code as id, 
+        neighborhood_code as name
+      FROM households
+      WHERE neighborhood_code IS NOT NULL
+      ORDER BY neighborhood_code
+    `);
+
+    // 4. Group resources by household_id
     const resourcesByHousehold = {};
 
     resourcesResult.rows.forEach(r => {
@@ -49,15 +59,16 @@ exports.listHouseholds = async (req, res) => {
       });
     });
 
-    // 4. Attach resources to each household object
+    // 5. Attach resources to each household object
     households.forEach(h => {
       h.resources = resourcesByHousehold[h.id] || [];
     });
 
-    // 5. Render directory - FIXED: Changed from "directory/directory" to "directory"
+    // 6. Render directory
     res.render("directory", {
       user: req.user,
       households,
+      neighborhoods: neighborhoodsResult.rows || [],
       currentPage: 'directory'
     });
 
@@ -66,6 +77,7 @@ exports.listHouseholds = async (req, res) => {
     res.render("directory", {
       user: req.user,
       households: [],
+      neighborhoods: [],
       error: "Unexpected error loading directory.",
       currentPage: 'directory'
     });
