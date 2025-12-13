@@ -21,6 +21,61 @@
     margin: 0;
   }
 
+  .search-bar {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+  }
+
+  .search-input-wrapper {
+    position: relative;
+    display: flex;
+    gap: 10px;
+  }
+
+  .search-input {
+    flex: 1;
+    padding: 12px 45px 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: border-color 0.3s;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: #2a5298;
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 18px;
+    pointer-events: none;
+  }
+
+  .clear-search-btn {
+    background: #f5f5f5;
+    color: #666;
+    border: 2px solid #e0e0e0;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .clear-search-btn:hover {
+    background: #e0e0e0;
+  }
+
   .filter-bar {
     background: white;
     padding: 20px;
@@ -78,6 +133,13 @@
   .filter-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 20px rgba(42, 82, 152, 0.3);
+  }
+
+  .results-count {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+    font-weight: 600;
   }
 
   .directory-grid {
@@ -233,6 +295,10 @@
     .directory-grid {
       grid-template-columns: 1fr;
     }
+
+    .search-input-wrapper {
+      flex-direction: column;
+    }
   }
 </style>
 
@@ -244,6 +310,23 @@
 <div class="info-banner">
   <h3>🗺️ Neighborhood Resources Map</h3>
   <p>Discover resources available in your community. Connect with neighbors who can help during emergencies or who need assistance.</p>
+</div>
+
+<!-- Search Bar -->
+<div class="search-bar">
+  <div class="search-input-wrapper">
+    <div style="position: relative; flex: 1;">
+      <input 
+        type="text" 
+        id="searchInput" 
+        class="search-input" 
+        placeholder="Search by name..." 
+        oninput="filterDirectory()"
+      >
+      <span class="search-icon">🔍</span>
+    </div>
+    <button class="clear-search-btn" onclick="clearSearch()">Clear Search</button>
+  </div>
 </div>
 
 <div class="filter-bar">
@@ -283,13 +366,16 @@
   <button class="filter-btn" onclick="resetFilters()">Reset</button>
 </div>
 
+<div class="results-count" id="resultsCount"></div>
+
 <% if (households && households.length > 0) { %>
   <div class="directory-grid">
     <% households.forEach(function(household) { %>
       <div class="directory-card" 
            data-category="<%= household.resources ? household.resources.map(r => r.resourceType.category).join(',') : '' %>" 
            data-neighborhood="<%= household.neighborhood_code || '' %>" 
-           data-readiness="<%= household.readiness_level || 'low' %>">
+           data-readiness="<%= household.readiness_level || 'low' %>"
+           data-name="<%= household.first_name.toLowerCase() %> <%= household.last_name.toLowerCase() %>">
         
         <div class="household-info">
           <div>
@@ -349,6 +435,7 @@
 
 <script>
   function filterDirectory() {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
     const categoryFilter = document.getElementById('filterCategory').value;
     const neighborhoodFilter = document.getElementById('filterNeighborhood').value;
     const readinessFilter = document.getElementById('filterReadiness').value;
@@ -358,15 +445,24 @@
     cards.forEach(card => {
       let show = true;
 
+      // Name search filter
+      if (searchInput) {
+        const cardName = card.getAttribute('data-name');
+        show = show && cardName.includes(searchInput);
+      }
+
+      // Category filter
       if (categoryFilter) {
         const categories = card.getAttribute('data-category').split(',');
         show = show && categories.includes(categoryFilter);
       }
 
+      // Neighborhood filter
       if (neighborhoodFilter) {
         show = show && card.getAttribute('data-neighborhood') === neighborhoodFilter;
       }
 
+      // Readiness filter
       if (readinessFilter) {
         show = show && card.getAttribute('data-readiness') === readinessFilter;
       }
@@ -378,14 +474,40 @@
         card.style.display = 'none';
       }
     });
+
+    // Update results count
+    updateResultsCount(visibleCount);
+  }
+
+  function updateResultsCount(count) {
+    const resultsCount = document.getElementById('resultsCount');
+    const totalCards = document.querySelectorAll('.directory-card').length;
+    
+    if (count === totalCards) {
+      resultsCount.textContent = `Showing all ${totalCards} household${totalCards !== 1 ? 's' : ''}`;
+    } else {
+      resultsCount.textContent = `Showing ${count} of ${totalCards} household${totalCards !== 1 ? 's' : ''}`;
+    }
+  }
+
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    filterDirectory();
   }
 
   function resetFilters() {
+    document.getElementById('searchInput').value = '';
     document.getElementById('filterCategory').value = '';
     document.getElementById('filterNeighborhood').value = '';
     document.getElementById('filterReadiness').value = '';
     filterDirectory();
   }
+
+  // Initialize results count on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const totalCards = document.querySelectorAll('.directory-card').length;
+    updateResultsCount(totalCards);
+  });
 </script>
 
 <%- include('partials/footer') %>

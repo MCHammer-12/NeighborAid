@@ -2,9 +2,20 @@ const db = require("../db/query");
 
 exports.showDashboard = async (req, res) => {
   try {
-    // Load household
+    // Load household with proper column aliasing
     const householdResult = await db.query(
-      "SELECT * FROM households WHERE user_id = $1",
+      `SELECT 
+        id,
+        user_id,
+        address,
+        phone_number AS phone,
+        neighborhood_code,
+        readiness_level,
+        notes,
+        created_at,
+        updated_at
+      FROM households 
+      WHERE user_id = $1`,
       [req.user.id]
     );
 
@@ -31,6 +42,7 @@ exports.showDashboard = async (req, res) => {
         FROM resources r
         JOIN resource_types rt ON r.resource_type_id = rt.id
         WHERE r.household_id = $1
+        ORDER BY rt.category, rt.name
         `,
         [household.id]
       );
@@ -45,11 +57,19 @@ exports.showDashboard = async (req, res) => {
       }));
     }
 
+    // Load neighborhoods for the map card count
+    const neighborhoodsResult = await db.query(
+      `SELECT DISTINCT neighborhood_code, COUNT(*) as member_count
+       FROM households
+       WHERE neighborhood_code IS NOT NULL
+       GROUP BY neighborhood_code`
+    );
+
     res.render("dashboard", {
       user: req.user,
       household,
       resources: formattedResources,
-      neighborhoods: [],
+      neighborhoods: neighborhoodsResult.rows,
       householdMembers: [],
       currentPage: 'dashboard'
     });

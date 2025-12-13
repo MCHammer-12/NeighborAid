@@ -3,14 +3,16 @@ const db = require('../db/query');
 // Main directory listing
 exports.listHouseholds = async (req, res) => {
   try {
-    // 1. Get all households + user names
+    // 1. Get all households + user names - SORTED BY LAST NAME, FIRST NAME
     const householdsResult = await db.query(`
       SELECT 
         h.*,
+        h.phone_number AS phone,
         u.first_name,
         u.last_name
       FROM households h
       JOIN users u ON h.user_id = u.id
+      ORDER BY u.last_name ASC, u.first_name ASC
     `);
 
     const households = householdsResult.rows;
@@ -27,6 +29,7 @@ exports.listHouseholds = async (req, res) => {
         rt.category AS type_category
       FROM resources r
       JOIN resource_types rt ON r.resource_type_id = rt.id
+      ORDER BY rt.category, rt.name
     `);
 
     // 3. Get distinct neighborhoods for filtering
@@ -73,7 +76,7 @@ exports.listHouseholds = async (req, res) => {
     });
 
   } catch (error) {
-    console.log("DIRECTORY ERROR:", error);
+    console.error("DIRECTORY ERROR:", error);
     res.render("directory", {
       user: req.user,
       households: [],
@@ -97,7 +100,7 @@ exports.showMap = async (req, res) => {
       currentPage: 'directory'
     });
   } catch (error) {
-    console.log("MAP VIEW ERROR:", error);
+    console.error("MAP VIEW ERROR:", error);
     res.redirect("/dashboard");
   }
 };
@@ -140,7 +143,7 @@ exports.getMapData = async (req, res) => {
     const centerLat = centroidResult.rows[0]?.center_lat || 40.2338; // Default BYU coords
     const centerLng = centroidResult.rows[0]?.center_lng || -111.6585;
 
-    // Fetch households + resources in same neighborhood
+    // Fetch households + resources in same neighborhood - SORTED BY NAME
     const mapDataResult = await db.query(
       `
       SELECT
@@ -170,6 +173,7 @@ exports.getMapData = async (req, res) => {
       LEFT JOIN resource_types rt ON rt.id = r.resource_type_id
       WHERE h.neighborhood_code = $1
       GROUP BY h.id, u.first_name, u.last_name
+      ORDER BY u.last_name ASC, u.first_name ASC
       `,
       [neighborhoodCode, centerLat, centerLng]
     );
@@ -177,7 +181,7 @@ exports.getMapData = async (req, res) => {
     res.json(mapDataResult.rows);
 
   } catch (error) {
-    console.log("MAP DATA ERROR:", error);
+    console.error("MAP DATA ERROR:", error);
     res.status(500).json({ error: "Failed to load map data" });
   }
 };

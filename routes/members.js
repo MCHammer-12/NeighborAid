@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
     if (!household || !household.neighborhood_code) {
       return res.render('members', {
         user: req.user,
-        members: [],
+        households: [],  // Changed from 'members' to 'households'
         neighborhood_code: null
       });
     }
@@ -30,31 +30,33 @@ router.get('/', async (req, res) => {
         u.first_name,
         u.last_name,
         h.address,
-        h.phone_number,
-        h.readiness_level
+        h.phone_number AS phone,
+        h.readiness_level,
+        h.neighborhood_code
       FROM households h
       JOIN users u ON h.user_id = u.id
       WHERE h.neighborhood_code = $1
       AND u.id <> $2
+      ORDER BY u.last_name, u.first_name
       `,
       [code, req.user.id]
     );
 
-    const members = membersResult.rows;
+    const households = membersResult.rows;  // Changed variable name
 
     // 4. Render the Members page
     res.render('members', {
       user: req.user,
-      members,
+      households,  // Changed from 'members' to 'households'
       neighborhood_code: code,
       currentPage: 'members'
     });
 
   } catch (err) {
-    console.log("MEMBERS ERROR:", err);
+    console.error("MEMBERS ERROR:", err);
     res.render('members', {
       user: req.user,
-      members: [],
+      households: [],  // Changed from 'members' to 'households'
       neighborhood_code: null,
       error: "Unable to load members."
     });
