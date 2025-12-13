@@ -20,6 +20,12 @@ const profileRoutes = require('./routes/profile');
 
 const app = express();
 
+// ----------------------
+// TRUST PROXY FOR HTTPS
+// ----------------------
+// Trust the first proxy (nginx) - required for secure cookies to work with HTTPS
+app.set('trust proxy', 1);
+
 // view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -46,9 +52,6 @@ app.use(
     }
   })
 );
-
-
-
 
 // debugging: show session (remove in production)
 app.use((req, res, next) => {
