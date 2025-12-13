@@ -5,14 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= typeof title !== 'undefined' ? title + ' - ' : '' %>NeighborAid</title>
   
-  <!-- CSS -->
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="/css/sidebar.css">
   <link rel="stylesheet" href="/css/main.css">
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/images/NeighborAid Icon.png">
+  <link rel="icon" type="image/png" href="/images/NeighborAid-Icon.jpg">
 </head>
 <body>
-  <%- include('sidebar') %>
   
+  <!-- Mobile Header (visible only on mobile) -->
+  <div class="mobile-header">
+    <button class="mobile-menu-toggle" id="mobile-menu-btn" aria-label="Toggle menu">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <div class="mobile-header-title">
+      <img src="/images/NeighborAid-Icon.jpg" alt="NeighborAid" class="mobile-logo">
+      <span>NeighborAid</span>
+    </div>
+  </div>
+
+  <!-- Sidebar Overlay for Mobile -->
+  <div class="sidebar-overlay"></div>
+
+  <!-- Sidebar Navigation -->
+  <%- include('sidebar') %>
+
+  <!-- Main Content Area -->
   <main class="main-content">
