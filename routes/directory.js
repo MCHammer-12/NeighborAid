@@ -1,13 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const directoryController = require('../controllers/directoryController');
-const requireLogin = require('../middleware/requireLogin');
 
+// Test route (can remove after testing)
 router.get('/map-test', (req, res) => {
   res.send('map route works');
 });
-router.get('/', requireLogin, directoryController.listHouseholds);
-router.get('/map', requireLogin, directoryController.showMap);
-router.get('/map/data', requireLogin, directoryController.getMapData);
+
+// Main directory listing page
+router.get('/', directoryController.listHouseholds);
+
+// Map view page
+router.get('/map', directoryController.showMap);
+
+// Map data API endpoint
+router.get('/map/data', directoryController.getMapData);
 
 module.exports = router;
