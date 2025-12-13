@@ -47,6 +47,25 @@
       <span class="nav-text">Directory</span>
     </a>
 
+    <a href="/directory/map" class="nav-item <%= currentPage === 'map' ? 'active' : '' %>">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+        <line x1="8" y1="2" x2="8" y2="18"></line>
+        <line x1="16" y1="6" x2="16" y2="22"></line>
+      </svg>
+      <span class="nav-text">Resource Map</span>
+    </a>
+
+    <a href="/members" class="nav-item <%= currentPage === 'members' ? 'active' : '' %>">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <span class="nav-text">Members</span>
+    </a>
+
     <a href="/alerts" class="nav-item <%= currentPage === 'alerts' ? 'active' : '' %>">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -55,7 +74,7 @@
       <span class="nav-text">Alerts</span>
     </a>
 
-    <% if (user && user.role === 'admin') { %>
+    <% if (typeof user !== 'undefined' && user && user.role === 'admin') { %>
     <a href="/neighborhoods" class="nav-item <%= currentPage === 'neighborhoods' ? 'active' : '' %>">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="10"></circle>
