@@ -97,7 +97,7 @@ exports.showMap = async (req, res) => {
   try {
     res.render("directory/map", {
       user: req.user,
-      currentPage: 'directory'
+      currentPage: 'map'
     });
   } catch (error) {
     console.error("MAP VIEW ERROR:", error);
