@@ -42,21 +42,24 @@ exports.handleLogin = async (req, res) => {
 };
 
 exports.showRegister = (req, res) => {
-  res.render('register', { error: null });
+  res.render('register', { error: null, formData: {} });
 };
 
 exports.handleRegister = async (req, res) => {
   const { first_name, last_name, email, password, confirmPassword, neighborhood_code } = req.body;
 
-  console.log("REGISTER DATA:", { first_name, last_name, email, neighborhood_code }); // Debug log
+  console.log("REGISTER DATA:", { first_name, last_name, email, neighborhood_code, type: typeof neighborhood_code }); // Debug log
 
   // Password match
   if (password !== confirmPassword) {
     return res.render("register", { error: "Passwords do not match", formData: req.body });
   }
 
-  // Validate neighborhood_code exists
-  if (!neighborhood_code) {
+  // Validate neighborhood_code exists and is not empty
+  // Convert to string and trim to handle number inputs
+  const neighborhoodCodeValue = neighborhood_code ? String(neighborhood_code).trim() : '';
+  
+  if (!neighborhoodCodeValue || neighborhoodCodeValue === '') {
     return res.render("register", { error: "Neighborhood code is required", formData: req.body });
   }
 
@@ -83,16 +86,16 @@ exports.handleRegister = async (req, res) => {
 
     const userId = newUser.rows[0].id;
 
-    console.log("Created user with ID:", userId, "Neighborhood code:", neighborhood_code); // Debug log
+    console.log("Created user with ID:", userId, "Neighborhood code:", neighborhoodCodeValue); // Debug log
 
-    // Create household with neighborhood_code
+    // Create household with neighborhood_code - use the validated value
     const householdResult = await db.query(
       `
       INSERT INTO households (user_id, neighborhood_code)
       VALUES ($1, $2)
       RETURNING *
       `,
-      [userId, neighborhood_code]
+      [userId, neighborhoodCodeValue]
     );
 
     console.log("Created household:", householdResult.rows[0]); // Debug log
@@ -112,7 +115,6 @@ exports.handleRegister = async (req, res) => {
     return res.render("register", { error: "Unexpected error occurred", formData: req.body });
   }
 };
-
 
 exports.logout = (req, res) => {
   req.session.destroy(() => {
